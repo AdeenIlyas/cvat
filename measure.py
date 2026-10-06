@@ -3,7 +3,7 @@ import time
 import sys
 
 # Replace with the actual URL and credentials once server is up
-URL = "http://localhost:8080/api/tasks/1/annotation_counts"
+URL = "http://localhost:8080/api/tasks/3/annotation_counts"
 SESSION_URL = "http://localhost:8080/api/auth/login"
 
 def measure():

@@ -39,7 +39,7 @@ export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Elem
         core.server.request(`/api/tasks/${taskId}/annotation_counts`, { method: 'GET' })
             .then((response: any) => {
                 if (mounted) {
-                    setData(response);
+                    setData(response.data || response);
                     setError(null);
                     setLoading(false);
                 }
@@ -81,7 +81,10 @@ export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Elem
     // Find all shape types for the datasets
     const allTypes = new Set<string>();
     labels.forEach(label => {
-        Object.keys(data[label].by_type).forEach(t => allTypes.add(t));
+        const byType = data[label]?.by_type;
+        if (byType && typeof byType === 'object') {
+            Object.keys(byType).forEach(t => allTypes.add(t));
+        }
     });
     
     const colors = [
@@ -96,7 +99,7 @@ export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Elem
     const datasets = Array.from(allTypes).map((type, index) => {
         return {
             label: type,
-            data: labels.map(label => data[label].by_type[type] || 0),
+            data: labels.map(label => data[label]?.by_type?.[type] || 0),
             backgroundColor: colors[index % colors.length],
         };
     });
