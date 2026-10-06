@@ -32,5 +32,12 @@ The work will be done in the `test` Django app on the backend, and integrated in
    - Clean up code.
    - Complete the Decision Record section in this Plan document.
 
-## Skipped Items (Initial Plan)
-I am aiming to complete all 10 requirements. However, if time constraints arise, Requirements 8 (WebSockets) and 9 (Connection Recovery) are the most likely candidates to be skipped or partially implemented in favor of solidifying the core endpoint, graph presentation, and error handling (Items 1-7).
+## Decision Record
+- **Backend Architecture**: Decided to use `TaskViewSet`'s `check_object_permissions` to handle the permission checks manually within a Functional Based View (FBV) in the `test` app. This allows reusing CVAT's robust OPA-based security without requiring complex rule additions or monkey-patching DRF routers.
+- **Data Grouping**: Opted to add an extra dimension of grouping by `type` (e.g., polygon, rectangle, track, tag) in addition to just `label__name`. This provides richer analytics and satisfies the optional requirement for an extra level of grouping.
+- **Frontend Charting**: Selected `react-chartjs-2` since `chart.js` is already present in `cvat-ui`'s `package.json`, avoiding the need to add new dependencies and ensuring UI consistency.
+- **Development Workflow**: Due to the limitations of `docker-compose.yml` which pulls prebuilt images, used `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build` to compile both backend and frontend changes locally.
+
+## What is omitted
+- Advanced WebSocket real-time updates for the graph (to save time, focusing on REST API instead).
+- Extra UI polish beyond `antd` standard components and `chart.js` default styling.
