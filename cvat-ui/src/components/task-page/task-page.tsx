@@ -28,6 +28,8 @@ import TopBarComponent from './top-bar';
 import DetailsComponent from './details';
 import { getCloudStorageById } from './cloud-storage-editor';
 
+import AnalyticsComponent from './analytics';
+
 const core = getCore();
 
 function TaskPageComponent(): JSX.Element {
@@ -150,6 +152,7 @@ function TaskPageComponent(): JSX.Element {
                         onUpdateTaskMeta={onUpdateTaskMeta}
                         labelsEditorProps={labelsEditorProps}
                     />
+                    <AnalyticsComponent taskId={id} />
                     <JobListComponent task={taskInstance} onJobUpdate={onJobUpdate} />
                 </Col>
             </Row>
