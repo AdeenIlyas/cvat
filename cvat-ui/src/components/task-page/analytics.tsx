@@ -31,6 +31,7 @@ interface AnalyticsProps {
 export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Element {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         let mounted = true;
@@ -39,12 +40,14 @@ export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Elem
             .then((response: any) => {
                 if (mounted) {
                     setData(response);
+                    setError(null);
                     setLoading(false);
                 }
             })
-            .catch((error: any) => {
+            .catch((err: any) => {
                 if (mounted) {
-                    console.error('Failed to load annotation counts', error);
+                    console.error('Failed to load annotation counts', err);
+                    setError('Failed to load annotation counts. You may not have permission.');
                     setLoading(false);
                 }
             });
@@ -55,6 +58,14 @@ export default function AnalyticsComponent({ taskId }: AnalyticsProps): JSX.Elem
 
     if (loading) {
         return <Spin style={{ margin: '20px auto', display: 'block' }} />;
+    }
+
+    if (error) {
+        return (
+            <Card title="Annotation Analytics" className="cvat-task-analytics" style={{ marginTop: 20 }}>
+                <div style={{ color: 'red' }}>{error}</div>
+            </Card>
+        );
     }
 
     if (!data || Object.keys(data).length === 0) {
